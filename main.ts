@@ -140,13 +140,11 @@ let guy = sprites.create(img`
     . . . . . . f f f f f f . . . . 
     . . . . . . . f f f . . . . . . 
     `, SpriteKind.Player)
-controller.moveSprite(guy, 100, 0)
 scene.cameraFollowSprite(guy)
 tiles.placeOnRandomTile(guy, sprites.castle.tileDarkGrass2)
-info.setScore(0)
+let movementSpeed = 100
 forever(function () {
-    info.setScore(guy.vx)
-    if (guy.vx > 0) {
+    if (controller.right.isPressed()) {
         animation.runImageAnimation(
         guy,
         [img`
@@ -221,7 +219,8 @@ forever(function () {
         200,
         true
         )
-    } else if (guy.vx < 0) {
+        guy.setVelocity(movementSpeed, 0)
+    } else if (controller.left.isPressed()) {
         animation.runImageAnimation(
         guy,
         [img`
@@ -296,7 +295,9 @@ forever(function () {
         200,
         true
         )
+        guy.setVelocity(movementSpeed * -1, 0)
     } else {
-    	
+        guy.setVelocity(0, 0)
+        animation.stopAnimation(animation.AnimationTypes.All, guy)
     }
 })
